@@ -59,9 +59,9 @@ class _MyBottomBarDemoState extends State<MyBottomBarDemo> {
         onTap: onTabTapped,
         backgroundColor: Colors.white,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.mail), label: "Blog"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.deepPurple,), label: "Home",),
+          BottomNavigationBarItem(icon: Icon(Icons.mail,color: Colors.deepPurple), label: "Blog"),
+          BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.deepPurple), label: "Profile"),
         ],
       ),
       body: PageView(
