@@ -30,9 +30,9 @@ class _VerifyState extends State<Verify> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(children: [
+    return SafeArea(
+      child: Scaffold(
+        body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(
             padding: EdgeInsets.only(left: 20.0, right: 20.0),
             child: Text(

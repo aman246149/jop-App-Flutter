@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:job/Auth/user_provider.dart';
 import 'package:job/Auth/verify.dart';
+import 'package:provider/provider.dart';
 
 import '../Reusable Components/reusableTextField.dart';
 
@@ -28,6 +30,8 @@ class _SignInState extends State<SignUp> {
             email: _email, password: _password);
         User? user = userCred.user;
         if (user != null) {
+          var provider = Provider.of<UserProvider>(context, listen: false);
+          provider.checkAdmin(userEmail: user.email);
           await user.updateDisplayName(_name);
         }
         Navigator.pushReplacement(
@@ -193,24 +197,10 @@ class _SignInState extends State<SignUp> {
                         SignInButton(Buttons.Google,
                             elevation: 6.00,
                             text: 'Sign up with Google ', onPressed: () async {
-                          try {
-                            final user = await googleSignIn.signIn();
-                            if (user != null) {
-                              final googleAuth = await user.authentication;
-                              final credential = GoogleAuthProvider.credential(
-                                accessToken: googleAuth.accessToken,
-                                idToken: googleAuth.idToken,
-                              );
-                              UserCredential? userCred =
-                                  await _auth.signInWithCredential(credential);
-                              User? currentUser = userCred.user;
-                              if (currentUser != null) {
-                                Navigator.pop(context);
-                              }
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
+                          await Provider.of<UserProvider>(context,
+                                  listen: false)
+                              .login();
+                          Navigator.pop(context);
                         }),
                       ],
                     ),
