@@ -5,6 +5,9 @@ class UserProvider extends ChangeNotifier {
     'goswamiajay300@gmail.com',
     'amanthapliyal14@gmail.com'
   ];
+  late String url;
+  late String userName;
+
   bool isAdmin = false;
   Future<bool> checkAdmin({required String userEmail}) async {
     if (admin.contains(userEmail)) {

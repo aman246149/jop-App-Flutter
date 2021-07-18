@@ -8,10 +8,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyBottomBarDemo(),
+      home: ChangeNotifierProvider(child: MyBottomBarDemo()),
     );
   }
 }
@@ -31,11 +31,6 @@ class MyBottomBarDemo extends StatefulWidget {
 }
 
 class _MyBottomBarDemoState extends State<MyBottomBarDemo> {
-  // Set default `_initialized` and `_error` state to false
-  bool _initialized = false;
-  bool _error = false;
-
-
   int _pageIndex = 0;
   PageController? _pageController;
 
@@ -47,7 +42,6 @@ class _MyBottomBarDemoState extends State<MyBottomBarDemo> {
 
   @override
   void initState() {
-    initializeFlutterFire(); //initiazlize flutter app function
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
   }
@@ -60,41 +54,23 @@ class _MyBottomBarDemoState extends State<MyBottomBarDemo> {
 
   @override
   Widget build(BuildContext context) {
-    if (_error) {  //if error comes 
-      return Center(child: Text("SomeThing Went Wrong"));
-    } else if (!_initialized) { //when firebase time to load
-      return Center(
-        child: Text("Loading..."),
-      );
-    } else {   //wheneverything gone right than we render widget
-      return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _pageIndex,
-          onTap: onTabTapped,
-          backgroundColor: Colors.white,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: Colors.deepPurple,
-              ),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.mail, color: Colors.deepPurple),
-                label: "Blog"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person, color: Colors.deepPurple),
-                label: "Profile"),
-          ],
-        ),
-        body: PageView(
-          children: tabPages,
-          onPageChanged: onPageChanged,
-          controller: _pageController,
-        ),
-      );
-    }
+    return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _pageIndex,
+        onTap: onTabTapped,
+        backgroundColor: Colors.white,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.mail), label: "Blog"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+      body: PageView(
+        children: tabPages,
+        onPageChanged: onPageChanged,
+        controller: _pageController,
+      ),
+    );
   }
 
   void onPageChanged(int page) {

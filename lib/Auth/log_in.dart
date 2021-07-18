@@ -5,7 +5,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:job/Auth/sing_up.dart';
 
-import 'reusableTextField.dart';
+import '../Reusable Components/reusableTextField.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({Key? key}) : super(key: key);
@@ -20,26 +20,6 @@ class _LogInState extends State<LogIn> {
   late String _email;
   late String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // checkAuthentication() async {
-  //   await _auth.authStateChanges().listen((user) {
-  //     if (user != null) {
-  //       Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //           builder: (context) => HomeScreen(),
-  //         ),
-  //       );
-  //     }
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   this.checkAuthentication();
-  // }
 
   login() async {
     if (_formKey.currentState!.validate()) {

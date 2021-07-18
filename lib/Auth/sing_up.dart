@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/button_list.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:job/Auth/verify.dart';
 
-import 'reusableTextField.dart';
+import '../Reusable Components/reusableTextField.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -15,6 +18,7 @@ class _SignInState extends State<SignUp> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   late String _email, _password, _name;
+  final googleSignIn = GoogleSignIn();
 
   signUp() async {
     if (_formkey.currentState!.validate()) {
@@ -175,7 +179,39 @@ class _SignInState extends State<SignUp> {
                                   color: Colors.white,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold),
-                            ))
+                            )),
+                        SizedBox(height: 10.0),
+                        Text(
+                          'or',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                            fontSize: 22.0,
+                          ),
+                        ),
+                        SizedBox(height: 15.0),
+                        SignInButton(Buttons.Google,
+                            elevation: 6.00,
+                            text: 'Sign up with Google ', onPressed: () async {
+                          try {
+                            final user = await googleSignIn.signIn();
+                            if (user != null) {
+                              final googleAuth = await user.authentication;
+                              final credential = GoogleAuthProvider.credential(
+                                accessToken: googleAuth.accessToken,
+                                idToken: googleAuth.idToken,
+                              );
+                              UserCredential? userCred =
+                                  await _auth.signInWithCredential(credential);
+                              User? currentUser = userCred.user;
+                              if (currentUser != null) {
+                                Navigator.pop(context);
+                              }
+                            }
+                          } catch (e) {
+                            print(e);
+                          }
+                        }),
                       ],
                     ),
                   ),

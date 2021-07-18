@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:job/Auth/auth_page.dart';
+import 'package:job/Auth/log_in.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class _UserPageState extends State<UserPage> {
           child: Text('Sign In'),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => AuthPage()));
+                context, MaterialPageRoute(builder: (context) => LogIn()));
           },
         ),
       ),
