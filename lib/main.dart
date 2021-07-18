@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:job/screens/BlogPage.dart';
 import 'package:job/screens/HomeScreen.dart';
 import 'package:job/screens/userpage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
