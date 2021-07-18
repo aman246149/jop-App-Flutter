@@ -1,8 +1,11 @@
 // ignore: file_names
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:job/Auth/user_provider.dart';
 import 'package:job/constant/constant.dart';
 import 'package:job/screens/FormPage.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,14 +15,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var useremail = "amanthapliyal14@gmail.com";
-  var isAdmi = true;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
+    provider.checkAdmin(userEmail: currentUser!.email);
     return Scaffold(
       floatingActionButton: Visibility(
-        visible: isAdmi,
+        visible: provider.getIsAdmin(),
         child: FloatingActionButton(
           onPressed: () {
             Navigator.push(
