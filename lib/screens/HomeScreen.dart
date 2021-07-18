@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Text("HomeScreen", style: TextStyle(color: Colors.white))),
         backgroundColor: Colors.deepPurple,
       ),
-      body: ChangeNotifierProvider("scaffold"),
+      body: Text("scaffold"),
     );
   }
 }
