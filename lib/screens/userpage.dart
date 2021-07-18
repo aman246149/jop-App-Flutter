@@ -16,7 +16,6 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
-    provider.checkAdmin(userEmail: currentUser!.email);
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<User?>(
@@ -30,7 +29,6 @@ class _UserPageState extends State<UserPage> {
                         ? NetworkImage(user.data!.photoURL.toString())
                         : null),
                 Text('${user.data!.displayName}'),
-                Text('${provider.getIsAdmin()}'),
                 TextButton(
                   child: Text('Sign Out'),
                   onPressed: () {

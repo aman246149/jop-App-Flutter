@@ -46,6 +46,8 @@ class UserProvider extends ChangeNotifier {
   void checkAdmin({required String? userEmail}) async {
     if (admin.contains(userEmail)) {
       _isAdmin = true;
+    } else {
+      _isAdmin = false;
     }
   }
 

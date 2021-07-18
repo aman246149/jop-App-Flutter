@@ -21,7 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
-    provider.checkAdmin(userEmail: currentUser!.email);
+    if (currentUser != null) {
+      provider.checkAdmin(userEmail: currentUser!.email);
+    } else {
+      provider.checkAdmin(userEmail: 'false');
+    }
     return Scaffold(
       floatingActionButton: Visibility(
         visible: provider.getIsAdmin(),
