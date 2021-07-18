@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 
 class UserProvider extends ChangeNotifier {
   List<String?> admin = [
@@ -47,7 +46,6 @@ class UserProvider extends ChangeNotifier {
   void checkAdmin({required String? userEmail}) async {
     if (admin.contains(userEmail)) {
       _isAdmin = true;
-      notifyListeners();
     }
   }
 

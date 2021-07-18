@@ -16,6 +16,7 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
+    provider.checkAdmin(userEmail: currentUser!.email);
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<User?>(
