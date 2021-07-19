@@ -25,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _getcompanyData() async {
     //fetching data from firebase
-
+    
+    var time=Timestamp.now();
+    
     Query q = _firestore.collection("companyData").orderBy("timeStamp");
     setState(() {
       _loadingProducts = true;
@@ -88,102 +90,104 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text("Loading"),
             )
           : RefreshIndicator(
-              onRefresh: _getcompanyData(),
-              child: ListView.builder(
-                itemCount: _products.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Color(0xFFF1F1F1),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      elevation: 3,
-                      shadowColor: Colors.grey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Text(
-                                _products[index]["company_name"],
-                                style: TextStyle(
-                                    fontSize: largeFontSize,
-                                    fontWeight: FontWeight.w900,
-                                    fontFamily: 'OpenSans-Regular'),
+          onRefresh: () async{
+            return  await _getcompanyData();
+          },
+            child: ListView.builder(
+              itemCount: _products.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    color: Color(0xFFF1F1F1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    elevation: 3,
+                    shadowColor: Colors.grey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Text(
+                              _products[index]["company_name"],
+                              style: TextStyle(
+                                  fontSize: largeFontSize,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: 'OpenSans-Regular'),
+                            ),
+                            Divider(),
+                            ListTile(
+                              leading: Icon(
+                                Icons.cast_for_education,
+                                color: Colors.deepPurple,
                               ),
-                              Divider(),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.cast_for_education,
-                                  color: Colors.deepPurple,
-                                ),
-                                title: Text(
-                                  "Degree:: ${_products[index]["degree_required"]}",
-                                  style: kmediumTextStyle,
-                                ),
+                              title: Text(
+                                "Degree:: ${_products[index]["degree_required"]}",
+                                style: kmediumTextStyle,
                               ),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.account_box,
-                                  color: Colors.deepPurple,
-                                ),
-                                title: Text(
-                                  "Position::  ${_products[index]["position"]}",
-                                  style: kmediumTextStyle,
-                                ),
+                            ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.account_box,
+                                color: Colors.deepPurple,
                               ),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.post_add,
-                                  color: Colors.deepPurple,
-                                ),
-                                title: Text(
-                                  "Posted On::  ${_products[index]["time"]}",
-                                  style: kmediumTextStyle,
-                                ),
+                              title: Text(
+                                "Position::  ${_products[index]["position"]}",
+                                style: kmediumTextStyle,
                               ),
-                              ListTile(
-                                leading: Icon(
-                                  Icons.source,
-                                  color: Colors.deepPurple,
-                                ),
-                                title: Text(
-                                  "Source::  ${_products[index]["source"]}",
-                                  style: kmediumTextStyle,
-                                ),
+                            ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.post_add,
+                                color: Colors.deepPurple,
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                child: FlatButton(
-                                  minWidth: MediaQuery.of(context).size.width,
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Apply",
-                                    style: TextStyle(
-                                        fontFamily: 'OpenSans-Regular',
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1),
-                                  ),
-                                  color: Colors.green,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
-                                ),
+                              title: Text(
+                                "Posted On::  ${_products[index]["time"]}",
+                                style: kmediumTextStyle,
                               ),
-                            ],
-                          ),
+                            ),
+                            ListTile(
+                              leading: Icon(
+                                Icons.source,
+                                color: Colors.deepPurple,
+                              ),
+                              title: Text(
+                                "Source::  ${_products[index]["source"]}",
+                                style: kmediumTextStyle,
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                              child: FlatButton(
+                                minWidth: MediaQuery.of(context).size.width,
+                                onPressed: () {},
+                                child: Text(
+                                  "Apply",
+                                  style: TextStyle(
+                                      fontFamily: 'OpenSans-Regular',
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1),
+                                ),
+                                color: Colors.green,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(10))),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
+          ),
     );
   }
 }
