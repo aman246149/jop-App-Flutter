@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot> _products = [];
+  List<DocumentSnapshot> reversedList=[];
   bool _loadingProducts = true;
 
   _getcompanyData() async {
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     var time=Timestamp.now();
     
-    Query q = _firestore.collection("companyData").orderBy("timeStamp");
+    Query q = _firestore.collection("companyData").orderBy("timeStamp",descending: true); //calling according to timestamp
     setState(() {
       _loadingProducts = true;
     });
@@ -40,6 +41,30 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     print(_products[0]["company_name"]);
     print(_products.length);
+  }
+
+  //revese the data
+
+  reverseSort(){
+    reversedList = new List.from(_products.reversed);
+
+    setState(() {
+      _products=reversedList;
+    });
+  }
+  
+  void _delete_Data(product)async{
+    var dataId="";
+    await _firestore.collection("companyData").where("company_name",isEqualTo: product)
+        .get().then((QuerySnapshot snapshot) {
+       snapshot.docs.forEach((f){
+         print("documentId "+f.reference.id);
+         dataId=f.reference.id;
+       });
+    });
+
+    await   _firestore.collection("companyData").doc(dataId).delete().then((value) => _getcompanyData())
+        .catchError((error)=>print("error"));
   }
 
   @override
@@ -84,6 +109,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         backgroundColor: Colors.deepPurple,
+        leading: Visibility(
+          visible: provider.getIsAdmin() ,
+          child: InkWell(
+              onTap: (){
+                reverseSort();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                Icon(Icons.sort_by_alpha_outlined),
+                Text("${_products.length}",style: kmediumTextStyle,)
+              ],)),
+        ),
       ),
       body: _products.length == 0
           ? Center(
@@ -177,6 +215,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(10))),
+                              ),
+                            ),
+
+                            Visibility(
+                              visible: provider.getIsAdmin(),
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                                child: FlatButton(
+                                  minWidth: MediaQuery.of(context).size.width,
+                                  onPressed: () {
+                                    _delete_Data(_products[index]["company_name"]);
+                                  },
+                                  child: Text(
+                                    "Delete",
+                                    style: TextStyle(
+                                        fontFamily: 'OpenSans-Regular',
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1),
+                                  ),
+                                  color: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10))),
+                                ),
                               ),
                             ),
                           ],
