@@ -43,7 +43,8 @@ class _FormPageState extends State<FormPage> {
       'degree_required': degreeController.text.toString(), // Stokes and Sons
       'position': positionController.text.toString(), // 42
       'source': sourceController.text.toString(), // 42
-      'time': findYearAndMonth()
+      'time': findYearAndMonth(),
+      'timeStamp': Timestamp.now(),
     }).then((value) {
       setState(() {
         isLoading = false;
