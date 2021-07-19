@@ -25,7 +25,7 @@ class _UserPageState extends State<UserPage> {
               return Column(children: [
                 CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: (user.data!.photoURL.toString().isEmpty)
+                    backgroundImage: (provider.checkUserType())
                         ? NetworkImage(user.data!.photoURL.toString())
                         : null),
                 Text('${user.data!.displayName}'),
