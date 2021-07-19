@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:job/Auth/forget_password.dart';
 import 'package:job/Auth/sing_up.dart';
 import 'package:job/Auth/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -137,6 +138,26 @@ class _LogInState extends State<LogIn> {
                           lableText: 'Password',
                           icon: Icon(Icons.lock, color: Colors.deepPurple),
                           obscureText: true,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.0),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ForgetPassword()));
+                                },
+                                child: Text('Forget password ?'),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 50.0,

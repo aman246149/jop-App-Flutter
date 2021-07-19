@@ -23,12 +23,24 @@ class _UserPageState extends State<UserPage> {
           builder: (context, user) {
             if (user.data != null) {
               return Column(children: [
-                CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: (provider.checkUserType())
-                        ? NetworkImage(user.data!.photoURL.toString())
-                        : null),
-                Text('${user.data!.displayName}'),
+                StreamBuilder<User?>(
+                    stream: _auth.userChanges(),
+                    builder: (context, currUser) {
+                      if (currUser.data != null) {
+                        return Column(children: [
+                          CircleAvatar(
+                              radius: 30.0,
+                              backgroundImage: (currUser.data!.photoURL != null)
+                                  ? NetworkImage(
+                                      currUser.data!.photoURL.toString())
+                                  : null),
+                          (currUser.data!.displayName != null)
+                              ? Text('${currUser.data!.displayName}')
+                              : Text('user name')
+                        ]);
+                      } else
+                        return Text('user name');
+                    }),
                 TextButton(
                   child: Text('Sign Out'),
                   onPressed: () {
