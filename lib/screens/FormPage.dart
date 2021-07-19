@@ -23,6 +23,7 @@ class _FormPageState extends State<FormPage> {
   TextEditingController degreeController = new TextEditingController();
   TextEditingController positionController = new TextEditingController();
   TextEditingController sourceController = new TextEditingController();
+  TextEditingController jobController = new TextEditingController();
 
 // creating a loading variable
   bool isLoading = false;
@@ -43,6 +44,7 @@ class _FormPageState extends State<FormPage> {
       'degree_required': degreeController.text.toString(), // Stokes and Sons
       'position': positionController.text.toString(), // 42
       'source': sourceController.text.toString(), // 42
+      'joburl':jobController.text.toString(),
       'time': findYearAndMonth(),
       'timeStamp': Timestamp.now(),
     }).then((value) {
@@ -91,6 +93,10 @@ class _FormPageState extends State<FormPage> {
               TextFormCustom(
                 controller: sourceController,
                 lablename: "enter source where you get this info",
+              ),
+              TextFormCustom(
+                controller: jobController,
+                lablename: "enter job url",
               ),
               Padding(
                 padding: const EdgeInsets.all(18.0),

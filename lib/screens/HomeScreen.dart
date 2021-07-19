@@ -67,6 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
         .catchError((error)=>print("error"));
   }
 
+  //implementing share job functionality
+  void shareJobInfo(){
+
+  }
+
   @override
   void initState() {
     super.initState();
@@ -148,14 +153,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           children: [
-                            Text(
-                              _products[index]["company_name"],
-                              style: TextStyle(
-                                  fontSize: largeFontSize,
-                                  fontWeight: FontWeight.w900,
-                                  fontFamily: 'OpenSans-Regular'),
-                            ),
-                            Divider(),
+                           ListTile(
+                             title:   Text(
+                               _products[index]["company_name"],
+                               style: TextStyle(
+                                   fontSize: largeFontSize,
+                                   fontWeight: FontWeight.w900,
+                                   fontFamily: 'OpenSans-Regular'),
+                             ),
+                             trailing: IconButton(icon: Icon(Icons.share),onPressed: (){
+                               shareJobInfo();
+                             },),
+                           ),
+                            // Divider(),
                             ListTile(
                               leading: Icon(
                                 Icons.cast_for_education,
