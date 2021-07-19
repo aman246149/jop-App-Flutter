@@ -29,10 +29,12 @@ class _SignInState extends State<SignUp> {
         UserCredential userCred = await _auth.createUserWithEmailAndPassword(
             email: _email, password: _password);
         User? user = userCred.user;
+        await user!.updateDisplayName(_name);
+        await user.updatePhotoURL(
+            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png');
         if (user != null) {
           var provider = Provider.of<UserProvider>(context, listen: false);
           provider.checkAdmin(userEmail: user.email);
-          await user.updateDisplayName(_name);
         }
         Navigator.pushReplacement(
           context,
