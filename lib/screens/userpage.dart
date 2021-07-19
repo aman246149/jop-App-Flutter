@@ -1,49 +1,55 @@
-// ignore: file_names
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:job/Auth/Auth.dart';
+import 'package:job/Auth/log_in.dart';
+import 'package:job/Auth/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key}) : super(key: key);
-
   @override
   _UserPageState createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text(
-              "UserScreen",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          backgroundColor: Colors.deepPurple,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              color: Colors.red,
-              width: MediaQuery.of(context).size.width,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Auth(),
-                      ));
-                },
-                child: Text(
-                  "Sign In",
-                  style: TextStyle(color: Colors.white),
+        body: StreamBuilder<User?>(
+          stream: _auth.authStateChanges(),
+          builder: (context, user) {
+            if (user.data != null) {
+              return Column(children: [
+                CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: (user.data!.photoURL.toString().isEmpty)
+                        ? NetworkImage(user.data!.photoURL.toString())
+                        : null),
+                Text('${user.data!.displayName}'),
+                TextButton(
+                  child: Text('Sign Out'),
+                  onPressed: () {
+                    if (provider.checkUserType()) {
+                      provider.logout();
+                    } else {
+                      _auth.signOut();
+                    }
+                  },
                 ),
-              ),
-            ),
-          ],
+              ]);
+            } else {
+              return TextButton(
+                child: Text('Sign In'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LogIn()));
+                },
+              );
+            }
+          },
         ),
       ),
     );
