@@ -64,6 +64,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.deepPurple,
@@ -72,7 +73,9 @@ class _LogInState extends State<LogIn> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 20.0, left: 20.0),
+              padding: EdgeInsets.only(
+                  top: (provider.kGetScreenHeight() < 580) ? 10.0 : 20.0,
+                  left: 20.0),
               child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +84,9 @@ class _LogInState extends State<LogIn> {
                       radius: 20.0,
                       backgroundImage: AssetImage('images/jobs.jpg'),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(
+                        height:
+                            (provider.kGetScreenHeight() < 580) ? 10.0 : 20.0),
                     Text(
                       'Welcome',
                       style: TextStyle(color: Colors.white60, fontSize: 15.0),
@@ -89,7 +94,7 @@ class _LogInState extends State<LogIn> {
                     SizedBox(height: 10.0),
                     RichText(
                       text: TextSpan(
-                        text: 'Sing In',
+                        text: 'Sign In',
                         style: TextStyle(
                             fontSize: 28.0, fontWeight: FontWeight.w700),
                       ),
@@ -98,7 +103,12 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(
+                height: (provider.kGetScreenHeight() > 600.0)
+                    ? 30.0
+                    : (provider.kGetScreenHeight() < 580)
+                        ? 10.0
+                        : 15.0),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -112,7 +122,11 @@ class _LogInState extends State<LogIn> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 50.0,
+                          height: (provider.kGetScreenHeight() > 600.0)
+                              ? 50.0
+                              : (provider.kGetScreenHeight() < 580)
+                                  ? 10.0
+                                  : 20.0,
                         ),
                         ReusableTextField(
                             validator: (input) {
@@ -160,7 +174,11 @@ class _LogInState extends State<LogIn> {
                           ),
                         ),
                         SizedBox(
-                          height: 50.0,
+                          height: (provider.kGetScreenHeight() > 700.0)
+                              ? 50.0
+                              : (provider.kGetScreenHeight() > 600.0)
+                                  ? 30.0
+                                  : 20.0,
                         ),
                         ElevatedButton(
                             style: ButtonStyle(
@@ -182,7 +200,9 @@ class _LogInState extends State<LogIn> {
                               'Sign In',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20.0,
+                                  fontSize: (provider.kGetScreenHeight() < 580)
+                                      ? 15.0
+                                      : 20.0,
                                   fontWeight: FontWeight.bold),
                             )),
                         SizedBox(height: 10.0),
@@ -194,7 +214,10 @@ class _LogInState extends State<LogIn> {
                             fontSize: 22.0,
                           ),
                         ),
-                        SizedBox(height: 15.0),
+                        SizedBox(
+                            height: (provider.kGetScreenHeight() < 580)
+                                ? 10.0
+                                : 15.0),
                         SignInButton(Buttons.Google,
                             elevation: 6.00,
                             text: 'Sign up with Google ', onPressed: () async {
@@ -203,7 +226,10 @@ class _LogInState extends State<LogIn> {
                               .login();
                           Navigator.pop(context);
                         }),
-                        SizedBox(height: 40.0),
+                        SizedBox(
+                            height: (provider.kGetScreenHeight() > 600.0)
+                                ? 40.0
+                                : 20.0),
                         Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

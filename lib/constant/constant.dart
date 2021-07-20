@@ -56,8 +56,7 @@ String findYearAndMonth() {
       break;
     default:
   }
-    
-    var customdate=" ${day} ${monthInString} ${year}";
-    return customdate;
 
+  var customdate = " ${day} ${monthInString} ${year}";
+  return customdate;
 }

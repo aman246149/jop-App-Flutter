@@ -51,5 +51,15 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  var _screenHeight;
+
+  void kSetScreenHeight(var screenHeight) {
+    _screenHeight = screenHeight;
+  }
+
+  kGetScreenHeight() {
+    return _screenHeight;
+  }
+
   bool getIsAdmin() => _isAdmin;
 }
