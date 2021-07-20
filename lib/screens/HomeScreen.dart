@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var provider = Provider.of<UserProvider>(context);
     provider.kSetScreenHeight(screenHeight);
-    print(screenHeight);
+
     if (currentUser != null) {
       provider.checkAdmin(userEmail: currentUser!.email);
     } else {
