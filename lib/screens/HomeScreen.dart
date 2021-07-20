@@ -96,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<UserProvider>(context);
+    var screenHeight = MediaQuery.of(context).size.height;
     provider.kSetScreenHeight(screenHeight);
 
     if (currentUser != null) {
