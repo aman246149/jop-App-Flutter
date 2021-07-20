@@ -8,6 +8,7 @@ import 'package:job/constant/constant.dart';
 import 'package:job/screens/FormPage.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -77,9 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //implementing share job functionality
-  void shareJobInfo() async{
-   await Share.share('check out my website https://example.com',
-        subject: 'Look what I made!');
+  void shareJobInfo(product) async {
+    await Share.share(
+        'check out your friends send you this job link ${product}');
+    ;
     print("Called");
   }
 
@@ -189,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 trailing: IconButton(
                                   icon: Icon(Icons.share),
                                   onPressed: () {
-                                    shareJobInfo();
+                                    shareJobInfo(_products[index]["joburl"]);
                                   },
                                 ),
                               ),
@@ -239,7 +241,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const EdgeInsets.fromLTRB(16, 8, 16, 8),
                                 child: FlatButton(
                                   minWidth: MediaQuery.of(context).size.width,
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await canLaunch(_products[index]["joburl"])
+                                        ? await launch(
+                                            _products[index]["joburl"])
+                                        : throw 'Could not launch url';
+                                  },
                                   child: Text(
                                     "Apply",
                                     style: TextStyle(

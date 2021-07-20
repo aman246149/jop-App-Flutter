@@ -69,6 +69,7 @@ class _SignInState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.deepPurple,
@@ -77,7 +78,9 @@ class _SignInState extends State<SignUp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 20.0, left: 20.0),
+              padding: EdgeInsets.only(
+                  top: (provider.kGetScreenHeight() < 580) ? 10.0 : 15.0,
+                  left: 20.0),
               child: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +89,9 @@ class _SignInState extends State<SignUp> {
                       radius: 20.0,
                       backgroundImage: AssetImage('images/jobs.jpg'),
                     ),
-                    SizedBox(height: 20.0),
+                    SizedBox(
+                        height:
+                            (provider.kGetScreenHeight() < 580) ? 10.0 : 20.0),
                     Text(
                       'Welcome',
                       style: TextStyle(color: Colors.white60, fontSize: 15.0),
@@ -94,7 +99,7 @@ class _SignInState extends State<SignUp> {
                     SizedBox(height: 10.0),
                     RichText(
                       text: TextSpan(
-                        text: 'Sing Up',
+                        text: 'Sign Up',
                         style: TextStyle(
                             fontSize: 28.0, fontWeight: FontWeight.w700),
                       ),
@@ -103,7 +108,12 @@ class _SignInState extends State<SignUp> {
                 ),
               ),
             ),
-            SizedBox(height: 30.0),
+            SizedBox(
+                height: (provider.kGetScreenHeight() > 600.0)
+                    ? 30.0
+                    : (provider.kGetScreenHeight() < 580)
+                        ? 10.0
+                        : 15.0),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -117,7 +127,11 @@ class _SignInState extends State<SignUp> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 50.0,
+                          height: (provider.kGetScreenHeight() > 600.0)
+                              ? 50.0
+                              : (provider.kGetScreenHeight() < 580)
+                                  ? 10.0
+                                  : 20.0,
                         ),
                         ReusableTextField(
                             validator: (input) {
@@ -161,7 +175,11 @@ class _SignInState extends State<SignUp> {
                           obscureText: true,
                         ),
                         SizedBox(
-                          height: 50.0,
+                          height: (provider.kGetScreenHeight() > 700.0)
+                              ? 50.0
+                              : (provider.kGetScreenHeight() > 600.0)
+                                  ? 30.0
+                                  : 20.0,
                         ),
                         ElevatedButton(
                             style: ButtonStyle(
@@ -183,7 +201,9 @@ class _SignInState extends State<SignUp> {
                               'Sign Up',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20.0,
+                                  fontSize: (provider.kGetScreenHeight() < 580)
+                                      ? 15.0
+                                      : 20.0,
                                   fontWeight: FontWeight.bold),
                             )),
                         SizedBox(height: 10.0),
@@ -192,7 +212,9 @@ class _SignInState extends State<SignUp> {
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
-                            fontSize: 22.0,
+                            fontSize: (provider.kGetScreenHeight() < 580)
+                                ? 18.0
+                                : 22.0,
                           ),
                         ),
                         SizedBox(height: 15.0),
