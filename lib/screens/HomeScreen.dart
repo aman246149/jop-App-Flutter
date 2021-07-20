@@ -7,6 +7,8 @@ import 'package:job/Auth/user_provider.dart';
 import 'package:job/constant/constant.dart';
 import 'package:job/screens/FormPage.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,7 +17,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   FirebaseAuth _auth = FirebaseAuth.instance;
   User? currentUser = FirebaseAuth.instance.currentUser;
 
@@ -75,6 +78,14 @@ class _HomeScreenState extends State<HomeScreen> {
         .catchError((error) => print("error"));
   }
 
+  //implementing share job functionality
+  void shareJobInfo(product) async {
+    await Share.share(
+        'check out your friends send you this job link ${product}');
+    ;
+    print("Called");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -84,8 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery.of(context).size.height;
-
     var provider = Provider.of<UserProvider>(context);
     provider.kSetScreenHeight(screenHeight);
 
@@ -124,20 +133,30 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Visibility(
           visible: provider.getIsAdmin(),
           child: InkWell(
-              onTap: () {
-                reverseSort();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Icon(Icons.sort_by_alpha_outlined),
-                  Text(
-                    "${_products.length}",
-                    style: kmediumTextStyle,
-                  )
-                ],
-              )),
+            onTap: () {
+              reverseSort();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.sort_by_alpha_outlined),
+                Text(
+                  "${_products.length}",
+                  style: kmediumTextStyle,
+                )
+              ],
+            ),
+          ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.bookmark_add),
+            ),
+          )
+        ],
       ),
       body: _products.length == 0
           ? Center(
@@ -164,14 +183,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: [
-                              Text(
-                                _products[index]["company_name"],
-                                style: TextStyle(
-                                    fontSize: largeFontSize,
-                                    fontWeight: FontWeight.w900,
-                                    fontFamily: 'OpenSans-Regular'),
+                              ListTile(
+                                leading: Icon(Icons.bookmark_add_rounded,
+                                    color: Colors.deepPurpleAccent),
+                                title: Text(
+                                  _products[index]["company_name"],
+                                  style: TextStyle(
+                                      fontSize: largeFontSize,
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'OpenSans-Regular'),
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.share),
+                                  onPressed: () {
+                                    shareJobInfo(_products[index]["joburl"]);
+                                  },
+                                ),
                               ),
-                              Divider(),
+                              // Divider(),
                               ListTile(
                                 leading: Icon(
                                   Icons.cast_for_education,
@@ -217,7 +246,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const EdgeInsets.fromLTRB(16, 8, 16, 8),
                                 child: FlatButton(
                                   minWidth: MediaQuery.of(context).size.width,
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await canLaunch(_products[index]["joburl"])
+                                        ? await launch(
+                                            _products[index]["joburl"])
+                                        : throw 'Could not launch url';
+                                  },
                                   child: Text(
                                     "Apply",
                                     style: TextStyle(
@@ -233,6 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Radius.circular(10))),
                                 ),
                               ),
+
                               Visibility(
                                 visible: provider.getIsAdmin(),
                                 child: Padding(
@@ -271,4 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
