@@ -7,6 +7,7 @@ import 'package:job/Auth/user_provider.dart';
 import 'package:job/constant/constant.dart';
 import 'package:job/screens/FormPage.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -76,7 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   //implementing share job functionality
-  void shareJobInfo() {}
+  void shareJobInfo() async{
+   await Share.share('check out my website https://example.com',
+        subject: 'Look what I made!');
+    print("Called");
+  }
 
   @override
   void initState() {
@@ -123,20 +128,30 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: Visibility(
           visible: provider.getIsAdmin(),
           child: InkWell(
-              onTap: () {
-                reverseSort();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Icon(Icons.sort_by_alpha_outlined),
-                  Text(
-                    "${_products.length}",
-                    style: kmediumTextStyle,
-                  )
-                ],
-              )),
+            onTap: () {
+              reverseSort();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(Icons.sort_by_alpha_outlined),
+                Text(
+                  "${_products.length}",
+                  style: kmediumTextStyle,
+                )
+              ],
+            ),
+          ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.bookmark_add),
+            ),
+          )
+        ],
       ),
       body: _products.length == 0
           ? Center(
