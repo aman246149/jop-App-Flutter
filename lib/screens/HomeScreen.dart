@@ -17,7 +17,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin {
   FirebaseAuth _auth = FirebaseAuth.instance;
   User? currentUser = FirebaseAuth.instance.currentUser;
 
@@ -181,6 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             children: [
                               ListTile(
+                                leading: Icon(Icons.bookmark_add_rounded,
+                                    color: Colors.deepPurpleAccent),
                                 title: Text(
                                   _products[index]["company_name"],
                                   style: TextStyle(
@@ -301,4 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
