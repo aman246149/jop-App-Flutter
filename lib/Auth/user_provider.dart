@@ -5,7 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class UserProvider extends ChangeNotifier {
   List<String?> admin = [
     'goswamiajay300@gmail.com',
-    'amanthapliyal14@gmail.com'
+    'amanthapliyal14@gmail.com',
+    'amansingh246149@gmail.com'
   ];
   var googleSignIn = GoogleSignIn();
   FirebaseAuth _auth = FirebaseAuth.instance;
