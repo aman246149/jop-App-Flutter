@@ -331,10 +331,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: [
-                              Visibility(
-                                visible: (provider.isLogedIn),
-                                child: ListTile(
-                                  leading: GestureDetector(
+                              ListTile(
+                                leading: Visibility(
+                                  visible: (provider.isLogedIn),
+                                  child: GestureDetector(
                                     onTap: () async {
                                       (isBookmarked[index])
                                           ? {
@@ -364,19 +364,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 : Colors.blueGrey[200]
                                             : Colors.white54),
                                   ),
-                                  title: Text(
-                                    _products[index]["company_name"],
-                                    style: TextStyle(
-                                        fontSize: largeFontSize,
-                                        fontWeight: FontWeight.w900,
-                                        fontFamily: 'OpenSans-Regular'),
+                                ),
+                                title: Text(
+                                  _products[index]["company_name"],
+                                  style: TextStyle(
+                                      fontSize: largeFontSize,
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: 'OpenSans-Regular'),
+                                ),
+                                trailing: IconButton(
+                                  icon: Icon(
+                                    Icons.share,
+                                    color: Colors.blueGrey[200],
                                   ),
-                                  trailing: IconButton(
-                                    icon: Icon(Icons.share),
-                                    onPressed: () {
-                                      shareJobInfo(_products[index]["joburl"]);
-                                    },
-                                  ),
+                                  onPressed: () {
+                                    shareJobInfo(_products[index]["joburl"]);
+                                  },
                                 ),
                               ),
                               // Divider(),
@@ -486,6 +489,4 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
     );
   }
-
-  
 }
