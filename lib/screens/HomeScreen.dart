@@ -299,10 +299,21 @@ class _HomeScreenState extends State<HomeScreen>
             )
           : RefreshIndicator(
               onRefresh: () async {
-                await _getcompanyData();
-                if (provider.isLogedIn) {
-                  await getIsBookmarked();
-                }
+                isBookmarkScreen
+                    ? {
+                        await getBoomarks(),
+                        if (provider.isLogedIn)
+                          {
+                            await getIsBookmarked(),
+                          }
+                      }
+                    : {
+                        await _getcompanyData(),
+                        if (provider.isLogedIn)
+                          {
+                            await getIsBookmarked(),
+                          }
+                      };
               },
               child: ListView.builder(
                 itemCount: _products.length,
