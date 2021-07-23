@@ -35,7 +35,7 @@ class _LogInState extends State<LogIn> {
       if (currentUser != null) {
         var provider = Provider.of<UserProvider>(context, listen: false);
         provider.checkAdmin(userEmail: currentUser.email);
-
+        provider.setIsloogedIn(true);
         Navigator.pop(context);
       }
     } catch (e) {
