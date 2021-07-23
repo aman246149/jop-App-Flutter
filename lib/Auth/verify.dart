@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:job/Auth/sing_up.dart';
+import 'package:job/Auth/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class Verify extends StatefulWidget {
   @override
@@ -57,6 +59,7 @@ class _VerifyState extends State<Verify> {
     user = _auth.currentUser;
     await user!.reload();
     if (user!.emailVerified) {
+      Provider.of<UserProvider>(context).setIsloogedIn(true);
       timer.cancel();
       Navigator.pop(context);
     }

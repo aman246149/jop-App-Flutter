@@ -9,6 +9,13 @@ class UserProvider extends ChangeNotifier {
   ];
   var googleSignIn = GoogleSignIn();
   FirebaseAuth _auth = FirebaseAuth.instance;
+  bool isLogedIn = false;
+
+  void setIsloogedIn(bool state) {
+    isLogedIn = state;
+    notifyListeners();
+  }
+
   bool _isGoogleUser = false;
   Future login() async {
     try {
@@ -21,6 +28,7 @@ class UserProvider extends ChangeNotifier {
         );
         UserCredential? userCred = await _auth.signInWithCredential(credential);
         _isGoogleUser = true;
+        setIsloogedIn(true);
         User? currentUser = userCred.user;
         if (currentUser != null) {
           checkAdmin(userEmail: currentUser.email);
@@ -40,6 +48,7 @@ class UserProvider extends ChangeNotifier {
   void logout() async {
     await googleSignIn.disconnect();
     _auth.signOut();
+    setIsloogedIn(false);
   }
 
   bool _isAdmin = false;

@@ -86,8 +86,10 @@ class _UserPageState extends State<UserPage> {
                           onPressed: () {
                             if (provider.checkUserType()) {
                               provider.logout();
+                              provider.setIsloogedIn(false);
                             } else {
                               _auth.signOut();
+                              provider.setIsloogedIn(false);
                             }
                           },
                         ),
