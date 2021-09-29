@@ -1,7 +1,11 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:job/Auth/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class BlogPage extends StatefulWidget {
   const BlogPage({Key? key}) : super(key: key);
@@ -11,70 +15,108 @@ class BlogPage extends StatefulWidget {
 }
 
 class _BlogPageState extends State<BlogPage> {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   TextEditingController imageurlController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
+  List<DocumentSnapshot> _blogs = [];
+  CollectionReference collection_path =
+      FirebaseFirestore.instance.collection('Blog');
+
   void saveDataToDatabase() {
-    print(imageurlController.text);
-    print(titleController.text);
-    print(descriptionController.text);
+    Map<String, String?> data = {
+      'imgurl': imageurlController.text,
+      'title': titleController.text,
+      'description': descriptionController.text
+    };
+    _firestore.collection('Blogs').add(data);
+    // print(imageurlController.text);
+    // print(titleController.text);
+    // print(descriptionController.text);
+  }
+
+  _getBlogData() async {
+    //fetching data from firebase
+
+    Query q = _firestore.collection("Blogs");
+    QuerySnapshot querySnapshot = await q.get();
+    setState(() {
+      _blogs = querySnapshot.docs;
+    });
+    print(_blogs[0]["imgurl"]);
+  }
+
+  void initialize() async {
+    await _getBlogData();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initialize();
   }
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<UserProvider>(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet<void>(
-            isScrollControlled: true,
-            context: context,
-            builder: (BuildContext context) {
-              return Container(
-                // height: 1000,
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: ListView(
-                    children: <Widget>[
-                      Divider(
-                        height: 100,
-                      ),
-                      TextField(
-                        controller: imageurlController,
-                        decoration:
-                            InputDecoration(hintText: "Enter Image Url"),
-                      ),
-                      TextField(
-                        controller: titleController,
-                        decoration: InputDecoration(hintText: "Enter Title"),
-                      ),
-                      TextField(
-                        controller: descriptionController,
-                        decoration:
-                            InputDecoration(hintText: "Enter Description"),
-                      ),
-                      Divider(
-                        height: 20,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                          child: const Text('Save data in Db'),
-                          onPressed: () {
-                            saveDataToDatabase();
-                            Navigator.pop(context);
-                          },
+      floatingActionButton: Visibility(
+        visible: provider.getIsAdmin(),
+        child: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet<void>(
+              isScrollControlled: true,
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  // height: 1000,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: ListView(
+                      children: <Widget>[
+                        Divider(
+                          height: 100,
                         ),
-                      )
-                    ],
+                        TextField(
+                          controller: imageurlController,
+                          decoration:
+                              InputDecoration(hintText: "Enter Image Url"),
+                        ),
+                        TextField(
+                          controller: titleController,
+                          decoration: InputDecoration(hintText: "Enter Title"),
+                        ),
+                        TextField(
+                          controller: descriptionController,
+                          decoration:
+                              InputDecoration(hintText: "Enter Description"),
+                        ),
+                        Divider(
+                          height: 20,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton(
+                            child: const Text('Save data in Db'),
+                            onPressed: () {
+                              saveDataToDatabase();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-        child: Icon(Icons.add),
+                );
+              },
+            );
+          },
+          child: Icon(Icons.add),
+        ),
       ),
       appBar: AppBar(
         title:
@@ -82,7 +124,7 @@ class _BlogPageState extends State<BlogPage> {
         backgroundColor: Colors.deepPurple,
       ),
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: _blogs.length,
         itemBuilder: (context, index) {
           return Stack(
             fit: StackFit.loose,
@@ -94,15 +136,16 @@ class _BlogPageState extends State<BlogPage> {
                     child: Column(
                       children: [
                         Container(
-                          height: 300,
                           width: MediaQuery.of(context).size.width,
-                          color: Colors.red,
+                          child: Image(
+                            image: NetworkImage(_blogs[index]["imgurl"]),
+                          ),
                         ),
                         Divider(
                           height: 20,
                         ),
                         Text(
-                          "Aman gets no1 in react developer and flutter,PM also appreacite it",
+                          _blogs[index]["title"],
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 25),
                         ),
@@ -110,11 +153,11 @@ class _BlogPageState extends State<BlogPage> {
                           height: 20,
                         ),
                         Text(
-                          "Aman gets no1 in react developer and flutter,PM also appreacite itAman gets no1 in react developer and flutter,PM also appreacite itAman gets no1 in react developer and flutter,PM also appreacite it",
+                          _blogs[index]["description"],
                           style: TextStyle(fontSize: 20),
                         ),
                         Divider(
-                          height: 190,
+                          height: 40,
                         ),
                         Divider(
                           height: 5,
